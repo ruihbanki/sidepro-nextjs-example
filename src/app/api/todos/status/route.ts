@@ -13,7 +13,7 @@ export async function PATCH(req: Request) {
 
     // Update the todo status in the database
     const result = await query(
-      "UPDATE todos SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *",
+      "UPDATE todos SET status = $1 WHERE id = $2 RETURNING *",
       [status, id]
     );
 

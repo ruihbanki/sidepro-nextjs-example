@@ -18,7 +18,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { title, description, priority, due_date } = body;
+    const { title, priority } = body;
 
     if (!title || !priority) {
       return NextResponse.json(
@@ -28,9 +28,9 @@ export async function POST(req: NextRequest) {
     }
 
     const result = await query<Todo>(
-      `INSERT INTO todos (title, description, status, priority, due_date)
-       VALUES ($1, $2, 'pending', $3, $4) RETURNING *`,
-      [title, description, priority, due_date]
+      `INSERT INTO todos (title, status)
+       VALUES ($1, 'pending') RETURNING *`,
+      [title]
     );
 
     return NextResponse.json(result.rows[0], { status: 201 });
