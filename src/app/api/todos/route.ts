@@ -42,3 +42,37 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    // Parse the request body
+    const { id } = await req.json();
+
+    console.log("delete todo", id);
+
+    // Validate the input
+    if (!id) {
+      return NextResponse.json({ message: "Invalid input" }, { status: 400 });
+    }
+
+    // Delete the todo from the database
+    const result = await query("DELETE FROM todos WHERE id = $1 RETURNING *", [
+      id,
+    ]);
+
+    if (result.rowCount === 0) {
+      return NextResponse.json({ message: "Todo not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      message: "Todo deleted successfully",
+      todo: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error deleting todo:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}

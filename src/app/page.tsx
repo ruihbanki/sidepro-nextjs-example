@@ -3,9 +3,23 @@
 import { fetcher } from "@/lib/fetcher";
 import { Todo } from "@/types";
 import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
+import { deleteTodoFetcher } from "./todo.actions";
 
 export default function Home() {
-  const { data: todos = [], isLoading } = useSWR<Todo[]>("/api/todos", fetcher);
+  const {
+    data: todos = [],
+    isLoading,
+    mutate,
+  } = useSWR<Todo[]>("/api/todos", fetcher);
+
+  const { trigger: deleteTodo } = useSWRMutation(
+    "/api/todos",
+    deleteTodoFetcher,
+    {
+      onSuccess: () => mutate(),
+    }
+  );
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -26,6 +40,7 @@ export default function Home() {
               <th className="px-8 py-4">Status</th>
               <th className="px-8 py-4">Priority</th>
               <th className="px-8 py-4">Due Date</th>
+              <th className="px-8 py-4"></th>
             </tr>
           </thead>
           <tbody>
@@ -52,6 +67,9 @@ export default function Home() {
                   {todo.due_date
                     ? new Date(todo.due_date).toLocaleDateString()
                     : "N/A"}
+                </td>
+                <td className="px-8 py-4 text-gray-300">
+                  <button onClick={() => deleteTodo(todo.id)}>Del</button>
                 </td>
               </tr>
             ))}
