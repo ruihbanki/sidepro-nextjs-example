@@ -87,11 +87,11 @@ export default function Home() {
           {todos?.map((todo) => (
             <div
               key={todo.id}
-              className={`flex border border-gray-700 rounded-md ${
-                todo.status === "completed" ? "line-through" : ""
+              className={`flex border border-gray-700 rounded-md text-gray-300 ${
+                todo.status === "completed" ? "line-through text-gray-600" : ""
               }`}
             >
-              <div className="flex justify-center flex-none w-14 px-2 py-4 text-gray-300">
+              <div className="flex justify-center flex-none w-14 px-2 py-4">
                 {todo.status === "completed" ? (
                   <button onClick={() => updateStatus(todo.id, "pending")}>
                     <FaCheckCircle className="text-green-500 text-2xl" />
@@ -109,8 +109,8 @@ export default function Home() {
                   </button>
                 )}
               </div>
-              <div className="flex-1 px-2 py-4 text-white">{todo.title}</div>
-              <div className="flex justify-center flex-none w-14 px-2 py-4 text-gray-300">
+              <div className="flex-1 px-2 py-4 ">{todo.title}</div>
+              <div className="flex justify-center flex-none w-14 px-2 py-4">
                 <button onClick={() => deleteTodo(todo.id)}>
                   <FaTrash className="text-red-500 text-lg" />
                 </button>
