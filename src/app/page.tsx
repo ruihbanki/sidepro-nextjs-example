@@ -3,8 +3,6 @@
 import { fetcher } from "@/lib/fetcher";
 import { Todo } from "@/types";
 import useSWR from "swr";
-import useSWRMutation from "swr/mutation";
-import { deleteTodoFetcher } from "./todo.actions";
 
 export default function Home() {
   const {
@@ -13,13 +11,14 @@ export default function Home() {
     mutate,
   } = useSWR<Todo[]>("/api/todos", fetcher);
 
-  const { trigger: deleteTodo } = useSWRMutation(
-    "/api/todos",
-    deleteTodoFetcher,
-    {
-      onSuccess: () => mutate(),
-    }
-  );
+  const deleteTodo = async (id: number) => {
+    await fetch("/api/todos", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    await mutate();
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
