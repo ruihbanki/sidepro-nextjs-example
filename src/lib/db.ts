@@ -9,7 +9,7 @@ const pool = new Pool({
   host: process.env.DBHOST,
   database: process.env.DBNAME,
   password: process.env.DBPASS,
-  port: 5435, // Default PostgreSQL port
+  port: Number(process.env.DBPORT),
 });
 
 // Define the query function that is fully type-safe
