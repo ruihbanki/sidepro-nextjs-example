@@ -4,6 +4,12 @@ import { fetcher } from "@/lib/fetcher";
 import { Todo } from "@/types";
 import { useState } from "react";
 import useSWR from "swr";
+import {
+  FaCheckCircle,
+  FaTrash,
+  FaCircle,
+  FaCircleNotch,
+} from "react-icons/fa";
 
 export default function Home() {
   const [title, setTitle] = useState("");
@@ -39,11 +45,14 @@ export default function Home() {
     await mutate();
   };
 
-  const completeTodo = async (id: number) => {
+  const updateStatus = async (id: number, status: string) => {
     await fetch("/api/todos/status", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, status: "completed" }),
+      body: JSON.stringify({
+        id,
+        status,
+      }),
     });
     await mutate();
   };
@@ -79,17 +88,32 @@ export default function Home() {
             <div
               key={todo.id}
               className={`flex border border-gray-700 rounded-md ${
-                todo.status === "completed"
-                  ? "text-green-400"
-                  : "text-yellow-400"
+                todo.status === "completed" ? "line-through" : ""
               }`}
             >
-              <div className="flex-none w-14 px-2 py-4 text-gray-300">
-                <button onClick={() => completeTodo(todo.id)}>Complete</button>
+              <div className="flex justify-center flex-none w-14 px-2 py-4 text-gray-300">
+                {todo.status === "completed" ? (
+                  <button onClick={() => updateStatus(todo.id, "pending")}>
+                    <FaCheckCircle className="text-green-500 text-2xl" />
+                  </button>
+                ) : (
+                  <button onClick={() => updateStatus(todo.id, "completed")}>
+                    <FaCircle
+                      className="text-gray-300 text-2xl"
+                      style={{
+                        fill: "none",
+                        stroke: "currentColor",
+                        strokeWidth: "5",
+                      }}
+                    />
+                  </button>
+                )}
               </div>
-              <div className="flex-1 px-8 py-4 text-white">{todo.title}</div>
-              <div className="flex-none w-14 px-2 py-4 text-gray-300">
-                <button onClick={() => deleteTodo(todo.id)}>Del</button>
+              <div className="flex-1 px-2 py-4 text-white">{todo.title}</div>
+              <div className="flex justify-center flex-none w-14 px-2 py-4 text-gray-300">
+                <button onClick={() => deleteTodo(todo.id)}>
+                  <FaTrash className="text-red-500 text-lg" />
+                </button>
               </div>
             </div>
           ))}

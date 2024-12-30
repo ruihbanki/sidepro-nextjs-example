@@ -4,7 +4,7 @@ import { Todo } from "@/types";
 
 export async function GET() {
   try {
-    const result = await query<Todo>("SELECT * FROM todos");
+    const result = await query<Todo>("SELECT * FROM todos ORDER BY id DESC");
     return NextResponse.json(result.rows);
   } catch (error) {
     console.error(error);
