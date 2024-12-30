@@ -4,12 +4,7 @@ import { fetcher } from "@/lib/fetcher";
 import { Todo } from "@/types";
 import { useState } from "react";
 import useSWR from "swr";
-import {
-  FaCheckCircle,
-  FaTrash,
-  FaCircle,
-  FaCircleNotch,
-} from "react-icons/fa";
+import { FaCheckCircle, FaTrash, FaCircle } from "react-icons/fa";
 
 export default function Home() {
   const [title, setTitle] = useState("");
