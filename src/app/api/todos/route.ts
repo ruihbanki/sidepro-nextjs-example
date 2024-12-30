@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { query } from "../../../lib/db";
 
-type Todo = {
+export type Todo = {
   id: number;
   title: string;
   description: string;

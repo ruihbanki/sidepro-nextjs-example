@@ -1,19 +1,7 @@
-import { Pool, QueryResult } from "pg";
+import { Pool, QueryResult, QueryResultRow } from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
-
-// Define the type for your query result rows
-export type Todo = {
-  id: number;
-  title: string;
-  description: string | null;
-  status: string;
-  priority: number;
-  due_date: string | null;
-  created_at: string;
-  updated_at: string;
-};
 
 // Create a connection pool
 const pool = new Pool({
@@ -25,7 +13,10 @@ const pool = new Pool({
 });
 
 // Define the query function that is fully type-safe
-export const query = async <T, Params extends unknown[]>(
+export const query = async <
+  T extends QueryResultRow,
+  Params extends unknown[] = unknown[]
+>(
   text: string,
   params?: Params
 ): Promise<QueryResult<T>> => {
