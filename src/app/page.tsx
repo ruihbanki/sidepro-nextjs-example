@@ -1,39 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-
-type Todo = {
-  id: number;
-  title: string;
-  description: string;
-  status: string;
-  priority: number;
-  due_date: string | null;
-};
+import { fetcher } from "@/lib/fetcher";
+import { Todo } from "@/types";
+import useSWR from "swr";
 
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: todos = [], isLoading } = useSWR<Todo[]>("/api/todos", fetcher);
 
-  useEffect(() => {
-    async function fetchTodos() {
-      try {
-        const response = await fetch("/api/todos");
-        const data: Todo[] = await response.json();
-        console.log(data);
-
-        setTodos(data);
-      } catch (error) {
-        console.error("Failed to fetch todos", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchTodos();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 

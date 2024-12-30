@@ -1,16 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { query } from "../../../lib/db";
-
-export type Todo = {
-  id: number;
-  title: string;
-  description: string;
-  status: string;
-  priority: number;
-  due_date: string | null;
-  created_at: string;
-  updated_at: string;
-};
+import { Todo } from "@/types";
 
 export async function GET() {
   try {
